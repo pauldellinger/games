@@ -80,7 +80,7 @@ if (strcmp(type, "lb")==0){
   char wordie[100];
   strcpy(wordie, "toner");
   bool test = check(wordie, 't', left,right, top,bottom);
-  printf("test for doer: %d\n", check("doer", 't', left,right, top,bottom);
+  printf("test for doer: %d\n", check("doer", 't', left,right, top,bottom));
 }
 
 return 0;
