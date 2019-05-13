@@ -131,7 +131,7 @@ return 0;
 
   }
   char get_side(char letter, char * left, char * right, char *top char * bottom){
-
+    int side = -1;
     for (int k=0; k<4; k++){
       if (letter==right[k]){
          side = 0;
@@ -149,7 +149,6 @@ return 0;
             side = 3;
             break;
       }
-      side = -1;
     }
     return side;
   }
