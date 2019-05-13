@@ -10,8 +10,8 @@ typedef struct word{
 
 bool test1(char* letters, char* word);
 bool test2(char center_letter, char* word);
-bool check(char* wordie, char start, char*left, char * right, char * top, char * bottom, cahr * letters);
-char get_side(char letter, char * left, char * right, char *top char * bottom);
+bool check(char* wordie, char start, char*left, char * right, char * top, char * bottom);
+char get_side(char letter, char * left, char * right, char *top, char * bottom);
 
 
 int main(int argc, char** argv)
@@ -118,7 +118,7 @@ return 0;
     return hit;
   }
 
-  bool check(char* wordie, char start, char*left, char * right, char * top, char * bottom, char * letters){
+  bool check(char* wordie, char start, char*left, char * right, char * top, char * bottom){
     if (wordie[0]!=start) return false;
     if(get_side(start, left,right, top, bottom)<0) return false;
     for (int k=1; k<strlen(word);k++){
@@ -133,19 +133,19 @@ return 0;
   char get_side(char letter, char * left, char * right, char *top char * bottom){
 
     for (int k=0; k<4; k++){
-      if (start==right[k]){
+      if (letter==right[k]){
          side = 0;
          break;
       }
-      if (start==left[k]){
+      if (letter==left[k]){
           side = 1;
           break;
       }
-      if (start==top[k]){
+      if (letter==top[k]){
            side = 2;
            break;
       }
-      if (start==bottom[k]){
+      if (letter==bottom[k]){
             side = 3;
             break;
       }
