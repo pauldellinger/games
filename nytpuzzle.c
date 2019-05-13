@@ -77,6 +77,10 @@ if (strcmp(type, "lb")==0){
   scanf("%s", &letters);
   printf("top: %s, bottom %s, left %s, right %s\n", top,bottom,left,right);
   int min=50;
+  char wordie[100];
+  strcpy(wordie, "toner");
+  bool test = check(wordie, 't', left,right, top,bottom);
+  printf("test for toner: %d\n", test);
 
 }
 
