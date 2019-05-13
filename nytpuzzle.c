@@ -16,6 +16,7 @@ bool test1(char* letters, char* word);
 bool test2(char center_letter, char* word);
 
 
+
 int main(int argc, char** argv)
 {
   char center_letter;
