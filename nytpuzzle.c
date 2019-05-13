@@ -3,6 +3,7 @@
 #include<string.h>
 #include <stdbool.h>
 #include <assert.h>
+
 typedef struct word{
   char letters[100];
   struct word *next;
@@ -76,11 +77,49 @@ if (strcmp(type, "lb")==0){
   printf("give all the letters(sorry):");
   scanf("%s", &letters);
   printf("top: %s, bottom %s, left %s, right %s\n", top,bottom,left,right);
-  int min=50;
+
   char wordie[100];
+
+  int count =0;
+  word_t *all_words = NULL;
+  word_t *tmp = NULL;
+
+  if (file != NULL) {
+    char line[100];
+    char result[100];
+    while(1) {
+        count++;
+        fgets(line, sizeof(line), file);
+        if (getc(file)==EOF) break;
+
+        fseek(file, -1, SEEK_CUR);
+        word_t * word = (word_t*) malloc(sizeof(word_t));
+        strcpy(word->letters, line);
+        word->next = NULL;
+        if (all_words==NULL){
+          all_words = word;
+          tmp = word;
+        }
+        else{
+          tmp->next = word;
+          tmp = tmp->next;
+        }
+
+        //printf("word : %s", line);
+        //printf("%s\n", line);
+
+      }
+    }
+    while (all_words->next!=NULL){
+      printf("word: %s\n", all_words->letters);
+    }
+      printf("words %d\n", count);
+
+  /*
   strcpy(wordie, "toner");
   bool test = check(wordie, 't', left,right, top,bottom);
   printf("test for doer: %d\n", check("doer", 't', left,right, top,bottom));
+  */
 }
 
 return 0;
