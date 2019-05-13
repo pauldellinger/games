@@ -112,6 +112,7 @@ if (strcmp(type, "lb")==0){
     }
     while (all_words->next!=NULL){
       printf("word: %s\n", all_words->letters);
+      all_words= all_words->next;
     }
       printf("words %d\n", count);
 
