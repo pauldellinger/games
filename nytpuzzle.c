@@ -119,29 +119,37 @@ return 0;
   }
 
   bool check(char* wordie, char start, char*left, char * right, char * top, char * bottom, char * letters){
-    char start_side = 'a';
+    if (wordie[0]!=start) return false;
+    if(get_side(start, left,right, top, bottom)<0) return false;
+    for (int k=1; k<strlen(word);k++){
+      if (get_side(wordie[k],left,right, top, bottom)==get_side(wordie[k-1],left,right, top, bottom) || get_side(wordie[k],left,right, top, bottom)<0) return false;
+    }
+
+    return true;
 
 
 
   }
-  char get_side(char letter, char * left, char * right, char *top char * bottom, char* letters){
+  char get_side(char letter, char * left, char * right, char *top char * bottom){
 
     for (int k=0; k<4; k++){
       if (start==right[k]){
-         start_side = 'r';
+         side = 0;
          break;
       }
       if (start==left[k]){
-          start_side = 'r';
+          side = 1;
           break;
       }
       if (start==top[k]){
-           start_side = 't';
+           side = 2;
            break;
       }
       if (start==bottom[k]){
-            start_side = 'b';
+            side = 3;
             break;
       }
+      side = -1;
     }
+    return side;
   }
