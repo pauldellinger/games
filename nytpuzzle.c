@@ -121,7 +121,7 @@ return 0;
   bool check(char* wordie, char start, char*left, char * right, char * top, char * bottom){
     if (wordie[0]!=start) return false;
     if(get_side(start, left,right, top, bottom)<0) return false;
-    for (int k=1; k<strlen(word);k++){
+    for (int k=1; k<strlen(wordie);k++){
       if (get_side(wordie[k],left,right, top, bottom)==get_side(wordie[k-1],left,right, top, bottom) || get_side(wordie[k],left,right, top, bottom)<0) return false;
     }
 
@@ -130,7 +130,7 @@ return 0;
 
 
   }
-  char get_side(char letter, char * left, char * right, char *top char * bottom){
+  char get_side(char letter, char * left, char * right, char *top, char * bottom){
     int side = -1;
     for (int k=0; k<4; k++){
       if (letter==right[k]){
