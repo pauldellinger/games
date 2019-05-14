@@ -13,7 +13,7 @@ bool test1(char* letters, char* word);
 bool test2(char center_letter, char* word);
 bool check(char* wordie, char start, char*left, char * right, char * top, char * bottom);
 char get_side(char letter, char * left, char * right, char *top, char * bottom);
-
+void recurse(char * letters_used, char start, word_t* wordlist, char*left, char * right, char * top, char * bottom, char* letters);
 
 int main(int argc, char** argv)
 {
@@ -110,18 +110,21 @@ if (strcmp(type, "lb")==0){
 
       }
     }
+    /*
     while (all_words->next!=NULL){
       printf("word: %s\n", all_words->letters);
       all_words= all_words->next;
     }
       printf("words %d\n", count);
-
+      */
   /*
   strcpy(wordie, "toner");
   bool test = check(wordie, 't', left,right, top,bottom);
   printf("test for doer: %d\n", check("doer", 't', left,right, top,bottom));
   */
 }
+
+
 
 return 0;
 
@@ -164,7 +167,7 @@ return 0;
   bool check(char* wordie, char start, char*left, char * right, char * top, char * bottom){
     if (wordie[0]!=start) return false;
     if(get_side(start, left,right, top, bottom)<0) return false;
-    for (int k=1; k<strlen(wordie);k++){
+    for (int k=1; k<strlen(wordie)-2;k++){
       if (get_side(wordie[k],left,right, top, bottom)==get_side(wordie[k-1],left,right, top, bottom) || get_side(wordie[k],left,right, top, bottom)<0) return false;
     }
 
@@ -194,4 +197,39 @@ return 0;
       }
     }
     return side;
+  }
+
+  void recurse(char * letters_used, char start, word_t* wordlist, word_t* all_words, char*left, char * right, char * top, char * bottom, char* letters){
+    if (strlen(letters_used)==strlen(letters)){
+      printf("\nPOSSIBLE COMBINATION : \n")
+      while (wordlist!=NULL){
+        printf("word: %s\n", wordlist->letters);
+        wordlist= wordlist->next;
+      }
+      return NULL;//base case
+    }
+    word_t * runner = all_words;
+    while (runner->next!=NULL){
+      if (check(runner->letters, start, left, right, top, bottom)){
+        word_t *word = NULL;
+        word_t* runner2 = wordlist;
+        int count =0;
+        while (runner2->next!=NULL){
+          runner2=runner2->next;
+          count ++;
+          if (count>10){
+            return NULL;
+          }
+
+        }
+        word_t *word = (word_t*)malloc(sizeof(word_t));
+        word->next = NULL;
+        strcpy(word->letters, runner->letters);
+        runner2->next = word;
+
+
+
+      }
+      runner = runner->next;
+    }
   }
