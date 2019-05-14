@@ -1,0 +1,15 @@
+
+recurse (letters used, letter start, wordlist)
+  base case - all letters have been used
+    -print wordlist
+  otherwise
+    -search the wordlist
+      -if word fits
+        -recurse (letters used + letters of the word, last letter of word, wordlist plus the word)
+
+
+
+structs needed:
+wordlist  - a linked list of words
+
+tails sham mush hoc curl lush hav
