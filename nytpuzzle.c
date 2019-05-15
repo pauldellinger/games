@@ -41,6 +41,9 @@ ones that fit the criteria. Letterboxed is solved by identifying the one word
 solutions to the box, then all the two word solutions to the box. There has always
 be a two-word solution to letterboxed.
 
+Some words may not be accepted by NYTimes.com, but that's only because I don't
+have the same dictionary as they do.
+
 */
 
 int main(int argc, char** argv)
@@ -52,7 +55,7 @@ int main(int argc, char** argv)
   FILE *file = fopen(argv[1], "rt");  //input dictionary in comand line
   char type[3];
   char letters[8];
-  printf("Spelling Bee (sb) or Letterbox (lb)?\n:");
+  printf("Spelling Bee (sb) or Letterboxed (lb)?\n");
   scanf("%s", &type);
 
 if (strcmp(type, "sb")==0){
@@ -80,12 +83,12 @@ if (strcmp(type, "sb")==0){
       char result[100];
       while(1) {
 
-          fgets(line, sizeof(line), file);
+          fgets(line, sizeof(line), file); //read each line in dict file
           if (getc(file)==EOF) break;
           fseek(file, -1, SEEK_CUR);
           //printf("word : %s", line);
           if (test1(letters, line) && test2(center_letter[0],line)){
-            printf("%s\n", line);
+            printf("%s\n", line); //print word if it fits criteria
             count++;
           }
         }
@@ -124,7 +127,7 @@ if (strcmp(type, "lb")==0){
   }
   printf("top: %s, bottom %s, left %s, right %s, letters: \n", top,bottom,left,right, letters);
 
-  char wordie[100];
+  //move all dictionary words to linked list all_words
 
   int count =0;
   word_t *all_words = NULL;
@@ -161,31 +164,34 @@ if (strcmp(type, "lb")==0){
 
   for (int i=0; i<13; i++){
   word_t * runner = all_words;
-  while (runner!=NULL){
-    //printf("%s\n", runner->letters);
+  while (runner!=NULL){//go through every word
 
-    strcpy(wordlist->letters, runner->letters);
+
+    strcpy(wordlist->letters, runner->letters); //add word to wordlist
     wordlist->next = NULL;
-    if(check(runner->letters, letters[i], left, right, top, bottom)){
-    //printf("starting with : %s\n", runner->letters);
-      base(letters, " ", wordlist);
+    if(check(runner->letters, letters[i], left, right, top, bottom)){//check if word meets criteria
+      char space[2] = " ";
+
+      base(letters, space, wordlist); //check if one word solution
       word_t * runner3 = wordlist;
-      if(runner3->next != NULL){
+
+      if(runner3->next != NULL){ //make sure wordlist is only one word
         while(runner3->next->next!=NULL){
           runner3 = runner3->next;
         }
         free(runner3->next);
         runner3->next = NULL;
       }
+
       runner2=all_words;
-      while(runner2!=NULL){
-        //printf("%s\n", runner2->letters);
+      while(runner2!=NULL){ //compare selected word to every other word
+
 
         if (check(runner2->letters, runner->letters[strlen(runner->letters)-3], left, right, top, bottom)){
-          //printf("comparing: %s and %s\n", runner->letters, runner2->letters);
-          base(letters, runner2->letters, wordlist);
+
+          base(letters, runner2->letters, wordlist); //check if combo solves
           word_t * runner3 = wordlist;
-          if(runner3->next != NULL){
+          if(runner3->next != NULL){ //reset wordlist for further combos
             while(runner3->next->next!=NULL){
               runner3 = runner3->next;
             }
@@ -194,10 +200,10 @@ if (strcmp(type, "lb")==0){
           }
 
         }
-        runner2=runner2->next;
+        runner2=runner2->next; //compare selected word to next word in all_words
       }
     }
-    runner=runner->next;
+    runner=runner->next; //change selected word to next word in all_words
     }
   }
   free(wordlist);
@@ -217,6 +223,11 @@ return 0;
 }
 
 bool test1(char* letters, char* word){
+  /*
+  This method for spelling be tests if a word meets the length requirement
+  and is made up of letters from the "hive." It returns true if the word
+  meets the criteria.
+  */
   if (strlen(word)<6) return false; //return false if under 4 letters
   for (int i = 0; i < strlen(word)-2; i++){ //iterate letters of the word
     bool hit = false;
@@ -233,6 +244,10 @@ bool test1(char* letters, char* word){
 
 
 bool test2(char center_letter, char* word){
+  /*
+  This method for spelling be checks if the word
+  contains the center letter. Returns true if it does
+  */
   bool hit = false;
   for (int i = 0; i < strlen(word); i++){
     if (word[i]==center_letter) hit =true;
@@ -241,6 +256,10 @@ bool test2(char center_letter, char* word){
 }
 
 bool check(char* wordie, char start, char*left, char * right, char * top, char * bottom){
+  /*
+  This method for letter boxed checks if a word meets the criteria. A word must have no
+  two letters on the same side. It must also start with a specfic starting letter.
+  */
   if (wordie[0]!=start) return false;
   if(get_side(start, left,right, top, bottom)<0) return false;
   if (strlen(wordie)<5)return false;
@@ -254,6 +273,9 @@ bool check(char* wordie, char start, char*left, char * right, char * top, char *
 
 }
 int get_side(char letter, char * left, char * right, char *top, char * bottom){
+  /*
+  This method for letter boxed returns the side for a given letter.
+  */
   int side = -1;
   for (int k=0; k<4; k++){
     if (letter==right[k]){
@@ -279,34 +301,41 @@ int get_side(char letter, char * left, char * right, char *top, char * bottom){
 
 
 void base(char *letters, char *word, word_t* wordlist){
-
+  /*
+  This method for letter boxed was initially meant to evaluate the base
+  case for recursive function. Now it takes a linked list of words as a parameter,
+  adds a given word to it, and evaluates if the combination solves the box.
+  Since we're looking for one-word two-word combinations, it only every takes
+  a word list with one word, but it could take longer wordlists.
+  */
   word_t *wordie = NULL;
   word_t *runner3 = wordlist;
   int count = 0;
   if(wordlist->next==NULL){
 
 
-    wordie = (word_t*)malloc(sizeof(word_t));
+    wordie = (word_t*)malloc(sizeof(word_t)); //append word to linked list
     wordie->next = NULL;
     strcpy(wordie->letters, word);
     while(runner3->next!=NULL){
       runner3 = runner3->next;
     }
     runner3->next = wordie;
+
     char update_letters[13];
     strcpy(update_letters, letters);
     for (int i=0; i<strlen(wordlist->letters);i++){
 
       for (int j=0;j<13; j++){
         if (update_letters[j]==wordlist->letters[i]){
-          update_letters[j] = '0';
+          update_letters[j] = '0'; //update letters based on first word
         }
       }
     }
     for (int i=0; i<strlen(word);i++){
       for (int j=0;j<13; j++){
         if (update_letters[j]==word[i]){
-          update_letters[j] = '0';
+          update_letters[j] = '0'; //update letters based on second word
         }
       }
     }
@@ -314,13 +343,13 @@ void base(char *letters, char *word, word_t* wordlist){
     int letters_left = 0;
 
     for (int i=0; i<13;i++){
-      if (update_letters[i]== '0')letters_left++;
+      if (update_letters[i]== '0')letters_left++; //evaluate how many letters used
     }
     //printf("%s\n", letters);
     if (letters_left==12){
-      printf("\nPOSSIBLE COMBINATION : \n");
+      printf("\nPOSSIBLE COMBINATION : \n"); //print if all the letters are used
       word_t* printer = wordlist;
-      printf("%s->%s", printer->letters, printer->next->letters);
+      printf("%s%s", printer->letters, printer->next->letters);
     }
   }
 }
